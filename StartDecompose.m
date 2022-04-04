@@ -10,11 +10,11 @@ function Udecompose2(ParFile)
 
 % Definining Some Paths
 MolPath = [pwd filesep 'MoleculeFiles' filesep ];
-InputPath = [pwd filesep 'InputFiles' filesep ];
-SavePath = [pwd filesep 'SaveOutputs' filesep 'SaveOutputsDecom' filesep];
-ExtrasPath = [pwd filesep 'Extras' filesep];
+% InputPath = [pwd filesep 'InputFiles' filesep ];
+SavePath = [pwd filesep 'SaveOutputs' filesep];
+% ExtrasPath = [pwd filesep 'Extras' filesep];
 ToolsPath = [pwd filesep 'Tools'];
-MainFilesPath = [pwd filesep 'MainPrograms' filesep 'MainProgramsDecom'];
+MainFilesPath = [pwd filesep 'MainPrograms'];
 addpath(ToolsPath);
 addpath(MainFilesPath);
 
