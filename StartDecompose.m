@@ -1,5 +1,8 @@
-% Author : Hemant Katiyar, 30-June-2020, (hkatiyar@uwaterloo.ca)
+% Author  : Dr. Hemant Katiyar
+% Email   : hkatiyar@uwaterloo.ca
+% Website : 
 
+% Description :
 % Function to help decompose complex unitaries into single qubit gates
 % and free evolutions
 %
@@ -22,12 +25,10 @@ addpath(MainFilesPath);
 run([InputPath ParFile]);
 run([MolPath Par.MoleculeFile]);
 
-
 % Number of spins
 Mol.nSpin = sum(Mol.spinlist);
 
 % Generate Paulis
-% [Ix,Iy,Iz,~,~,~,D] = prodopSparse(1/2,Mol.nSpin);---
 [Ix,Iy,Iz,~,~,~,D] = prodopSparse(Mol.spinNumbers,Mol.spinlist);
 
 % Create Hint(free of chemical shift) and HintFull(includes chemical shift)
@@ -35,11 +36,6 @@ vtemp = zeros(size(Mol.v));
 Mol.Hint = genHintWeak(Mol.spinlist,vtemp,Mol.J,D,Iz);
 Mol.HintFull = genHint(Mol.spinlist,Mol.v,Mol.J,D,Ix,Iy,Iz);
 
-% Hadamard gates acting on all spins
-% Had = (1/sqrt(2))*[1 1; 1 -1];
-% for j=1:Mol.nSpin-1
-%     Had = kron(Had,(1/sqrt(2))*[1 1; 1 -1]);
-% end
 Iyy=zeros(D);
 for j=1:Mol.nSpin
     Iyy = Iyy + Iy(:,:,j);
@@ -47,37 +43,29 @@ end
 Had = expm(-1i*pi/2*Iyy);
 
 % Initializing some variables
-Par.VarPerSec = Mol.nSpin*2 + 1;
+Par.VarPerSec = 1+ Mol.nSpin*2;
 Par.TotVar = Par.VarPerSec*Par.nSec + Mol.nSpin*3;
 
 % Either create initial guess or load a guess depending upon input from user
 if Par.GuessFlag==0
     x = InitialGuess(Par.TotVar,Par.nSec,Par.VarPerSec,Par.DelayControl,Par.MaxIniDelay);
-%     save guess.mat x
-%     load guess1.mat
 else
     load([SavePath Par.GuessFileName],'-mat','x');
-%      x = x+(rand(size(x))-0.5);
-     % x = [rand(1,3*15)*5 x];
-%     x= x+(rand(size(x)))/2;
-%       x= x+(rand(size(x))-0.5);
 end
 
 % Calculate total delay time for guess
 DelayTime=0;
-for j=1:Par.nSec
-    DelayTime=DelayTime+ abs(x(j*Par.VarPerSec))*Par.DelayControl/pi;
+if Par.nSec~=0
+    for j=1:Par.nSec
+        DelayTime=DelayTime+ abs(x(j*Par.VarPerSec))*Par.DelayControl/pi;
+    end
 end
 
 % Save data in savepath
 fileName=[SavePath Par.SaveFileName '.mat'];
 save(fileName,'Par','Mol','x')
 
-% % Function Definition
-% CalcFid = @(x,y,z) abs(trace(x*y'))/2^z;
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 stepsize = Par.init_stepsize;
 
@@ -182,9 +170,4 @@ save(fileName,'Par','Mol','x','Fid')
 % Uf{end}
 FixPhases(Par.SaveFileName)
 
-%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Add penalty on time
-% write correcting phases program auto ---- Done
-% test with other stepsize function ---- Better results
-% test new conjugate method ----- Bad results
-% Add overwrite Prevention
+% %%%%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
