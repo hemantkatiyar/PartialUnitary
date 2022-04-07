@@ -9,13 +9,18 @@ function [Fid,Uf] = CalcFidDecom(x,nSpin,nSec,VarPerSec,DelayControl,Iz,Had,Hint
 
 % Function Definition
 CalcFid = @(x,y,z) abs(trace(x*y'))/z;
+sTarg=size(Utarg);
+D1=sTarg(2);
 
 Uf  = cell(1,2*nSec+2);
 if nSec~=0
     for n = 1:nSec
         Ievo = n*VarPerSec;
         Ilast = (n-1)*VarPerSec;
-    
+        
+        size(Iz)
+        size(x)
+
         PhIz = sum(repmat(x(Ilast+1:Ilast+nSpin),D,1).*Iz,2);
         AIz  = sum(repmat(x(Ilast+nSpin+1:Ilast+2*nSpin),D,1).*Iz,2);
     
@@ -41,7 +46,7 @@ if nSec~=0
     Uf{1,2*nSec+1}=Rxy*Uf{1,2*nSec};
     Uf{1,2*nSec+2}=Rz.*Uf{1,2*nSec+1};
     
-    Fid = CalcFid(Uf{1,end},Utarg,D);
+    Fid = CalcFid(Uf{1,end}(1:sTarg(1),1:sTarg(2)),Utarg,D1);
 else % Only 2 Unitaries Needed
     Ilast=0;
     PhIz = sum(repmat(x(Ilast+1:Ilast+nSpin),D,1).*Iz,2);
@@ -54,7 +59,7 @@ else % Only 2 Unitaries Needed
     Uf{1,1}=Rxy;
     Uf{1,2}=Rz.*Uf{1,1};
     
-    Fid = CalcFid(Uf{1,end},Utarg,D);
+    Fid = CalcFid(Uf{1,end}(1:sTarg(1),1:sTarg(2)),Utarg,D1);
 end
 
 

@@ -9,11 +9,11 @@
 % Usage: Udecompose(ParFile)
 % ParFile is the name (string) of input file stored in InputFiles folder
 
-function Udecompose2(ParFile)
+function StartDecompose(ParFile)
 
 % Definining Some Paths
 MolPath = [pwd filesep 'MoleculeFiles' filesep ];
-% InputPath = [pwd filesep 'InputFiles' filesep ];
+InputPath = [pwd filesep ];
 SavePath = [pwd filesep 'SaveOutputs' filesep];
 % ExtrasPath = [pwd filesep 'Extras' filesep];
 ToolsPath = [pwd filesep 'Tools'];
@@ -78,7 +78,7 @@ counter=1;
 fprintf('  Fidelity  |  StepSize  |  Max(ConjGrad)  |  Iteration  |  FreeEvo(ms)  |  Time(s) \n');
 fprintf('  %6.6f    %6.5f        %6.5f        %5d            %5.4f        %5.2f \n',Fid,stepsize,max(olddirc),counter,DelayTime*1e+3,toc);
 dspCheck = max((Par.TargFid-Fid)*0.2,1e-4)+Fid;
-FixPhases(Par.SaveFileName)
+% FixPhases(Par.SaveFileName)
 save(fileName,'Par','Mol','x','Fid')
 % Conjugate gradient reset flag, if its 1 we lose conjugacy
 resetflag=0;
@@ -124,12 +124,16 @@ while Fid<Par.TargFid
     % Displaying and saving current variables
     if (Fid>dspCheck || mod(counter,50)==0)
         save(fileName,'Par','Mol','x','Fid')
-        FixPhases(Par.SaveFileName)
+        % FixPhases(Par.SaveFileName)
         DelayTime=0;
         for j=1:Par.nSec
             DelayTime=DelayTime+abs(x(j*Par.VarPerSec))*Par.DelayControl/pi;
         end
         fprintf('  %6.6f    %6.5f        %6.5f        %5d            %5.4f          %5.2f \n',Fid,stepsize,max(olddirc),counter,DelayTime*1e+3,toc);
+        Aaa=Uf{1:end};
+        Aaa
+        Aaa(:,1:2)
+        Par.Utarg
         dspCheck = max((Par.TargFid-Fid)*0.2,1e-4)+Fid;
     end
     
@@ -168,6 +172,6 @@ end %Big while loop
 
 save(fileName,'Par','Mol','x','Fid')
 % Uf{end}
-FixPhases(Par.SaveFileName)
+% FixPhases(Par.SaveFileName)
 
 % %%%%%%%%%%%%%%%%%%%%%%%%% MAIN PROGRAM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
