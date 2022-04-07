@@ -41,8 +41,18 @@ else
     Ilast=0;
     for j = 1:nSpin
         Grad(Ilast+j) =
-        EvalGrad(-1i*(Ub{1,end-1}*(Iz(:,j).*Uf{1,end-1})-Ub{1,end-2}*(Iz(:,j).*Uf{1,end-2})),Utarg,trxjpj,D);
-        %#CHECK
+        EvalGrad(-1i*(Ub{1,end-1}*(Iz(:,j).*Uf{1,end-1})-Uf{1,end}.*transpose(Iz(:,j)))),Utarg,trxjpj,D);
         Grad(Ilast+nSpin+j) = EvalGrad(-1i*Ub{1,end-1}*(cos(x(Ilast+j))*Ix(:,:,j)+sin(x(Ilast+j))*Iy(:,:,j))*Uf{1,end-1},Utarg,trxjpj,D); 
         Grad(Ilast+2*nSpin+j) = EvalGrad(-1i*(Iz(:,j).*Uf{1,end}),Utarg,trxjpj,D);
+    end
 end
+
+
+% Ub{1} =  Uf{2}*Uf{1}' = U{2}
+% Ub{2} =  Uf{2}*Uf{2}' = Id
+% Uf{1} = U1
+% Uf{2} = U2*U1
+
+
+% Ub1 Iz Uf1 - Ub0 Iz Uf0
+% U2  Iz U1  - U2U1  Iz Id

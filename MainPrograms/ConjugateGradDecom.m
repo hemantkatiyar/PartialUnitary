@@ -1,3 +1,9 @@
+% Author  : Dr. Hemant Katiyar
+% Email   : hkatiyar@uwaterloo.ca
+% Website : 
+
+% Description :
+% 
 function [gooddirc,maxmult] = ConjugateGradDecom(resetflag,nSpin,iter,grad,oldgrad,olddirc,Fid,x,stepsize,Iz,Had,Hint,nSec,VarPerSec,DelayControl,Utarg,D)
 
 if(iter ~= 1 && ~resetflag)
