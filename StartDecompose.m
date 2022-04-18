@@ -1,6 +1,6 @@
 % Author  : Dr. Hemant Katiyar
 % Email   : hkatiyar@uwaterloo.ca
-% Website : 
+% Website : ComingUp
 
 % Description :
 % Function to help decompose complex unitaries into single qubit gates
