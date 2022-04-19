@@ -130,10 +130,6 @@ while Fid<Par.TargFid
             DelayTime=DelayTime+abs(x(j*Par.VarPerSec))*Par.DelayControl/pi;
         end
         fprintf('  %6.6f    %6.5f        %6.5f        %5d            %5.4f          %5.2f \n',Fid,stepsize,max(olddirc),counter,DelayTime*1e+3,toc);
-        Aaa=Uf{1:end};
-        Aaa
-        Aaa(:,1:2)
-        Par.Utarg
         dspCheck = max((Par.TargFid-Fid)*0.2,1e-4)+Fid;
     end
     
@@ -171,6 +167,16 @@ while Fid<Par.TargFid
 end %Big while loop
 
 save(fileName,'Par','Mol','x','Fid')
+UfinalFull = Uf{1,end};
+Ufinal = Uf{1,end}(:,1:2)
+Uttarg = Par.Utarg
+save('TestResult.mat','Uttarg','Ufinal','UfinalFull')
+% Fid
+% Aaa=Uf{1:end};
+% UfinalFull = Aaa;
+% Ufinal = Aaa(:,1:2)
+% Uttarg = Par.Utarg
+% save('TestResult.mat','Uttarg','Ufinal','UfinalFull')
 % Uf{end}
 % FixPhases(Par.SaveFileName)
 

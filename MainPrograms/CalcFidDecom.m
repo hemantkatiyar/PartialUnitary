@@ -18,9 +18,6 @@ if nSec~=0
         Ievo = n*VarPerSec;
         Ilast = (n-1)*VarPerSec;
         
-        size(Iz)
-        size(x)
-
         PhIz = sum(repmat(x(Ilast+1:Ilast+nSpin),D,1).*Iz,2);
         AIz  = sum(repmat(x(Ilast+nSpin+1:Ilast+2*nSpin),D,1).*Iz,2);
     
@@ -58,7 +55,6 @@ else % Only 2 Unitaries Needed
     
     Uf{1,1}=Rxy;
     Uf{1,2}=Rz.*Uf{1,1};
-    
     Fid = CalcFid(Uf{1,end}(1:sTarg(1),1:sTarg(2)),Utarg,D1);
 end
 
